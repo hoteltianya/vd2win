@@ -1,0 +1,6 @@
+sd=default,threads=16,openflags=o_direct
+sd=sd1,lun=\.\PHYSICALDRIVE1 
+sd=sd2,lun=\.\PHYSICALDRIVE2 
+wd=wd1,sd=sd*,xfersize=1M,rdpct=0,seekpct=0
+rd=run1,wd=wd1,iorate=max,el=100000,in=1,warmup=600
+        
