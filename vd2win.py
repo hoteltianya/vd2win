@@ -36,6 +36,7 @@ class Vdbench():
         self.lun_list = ['\\.\PHYSICALDRIVE1', '\\.\PHYSICALDRIVE2']
 
     def get_lun_list(self):
+        self.lun_list = []
         pass
 
     def creat_vd_config(self):
@@ -82,12 +83,15 @@ rd=run1,wd=wd1,iorate=max,elapsed=600,interval=1
         for bad_172 in bad_list_172:
             print('bad list 172:\n \033[5;34;43m %s \033[0m' % bad_172)
 
+    def run(self):
+        self.get_lun_list()
+        self.creat_vd_config()
+        self.exec_vdbench()
+        self.check_reult()
 
+a = Vdbench()
+a.run()
 
-
-a =Vdbench()
-a.check_reult()
-# get_disk_smartinfo('/dev/sdc')
 
 
 
