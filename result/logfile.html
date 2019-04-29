@@ -1,0 +1,55 @@
+<pre>
+Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.
+Vdbench distribution: vdbench50403
+
+14:52:03.712 input argument scanned: '-fvdconfig'
+14:52:03.712 input argument scanned: '-oresult'
+14:52:03.712 java.vendor                   Oracle Corporation
+14:52:03.712 java.home                     C:\Program Files (x86)\Java\jre7
+14:52:03.712 java.vm.specification.version 1.7
+14:52:03.712 java.vm.version               24.79-b02
+14:52:03.712 java.vm.vendor                Oracle Corporation
+14:52:03.712 java.specification.version    1.7
+14:52:03.712 java.class.version            51.0
+14:52:03.712 user.name                     sumu
+14:52:03.712 user.dir                      C:\Users\sumu\PycharmProjects\vd2win
+14:52:03.712 java.class.path               C:\Users\sumu\Desktop\vd\vdbench50403\;C:\Users\sumu\Desktop\vd\vdbench50403\classes;C:\Users\sumu\Desktop\vd\vdbench50403\vdbench.jar 
+14:52:03.712 os.name                       Windows 8.1
+14:52:03.712 os.arch                       x86
+14:52:03.712 os.version                    6.3
+14:52:03.712 sun.arch.data.model           32
+14:52:03.743 
+14:52:03.743 Adjusted default JVM count for host=localhost from jvms=1 to jvms=2 because of iorate=max and a total of 2 sds.
+14:52:03.743 
+14:52:03.743 Starting slave: C:\Users\sumu\Desktop\vd\vdbench50403\vdbench SlaveJvm -m localhost -n localhost-10-190429-14.52.03.696 -l localhost-0 -p 5570   
+14:52:03.774 Starting slave: C:\Users\sumu\Desktop\vd\vdbench50403\vdbench SlaveJvm -m localhost -n localhost-11-190429-14.52.03.696 -l localhost-1 -p 5570   
+14:52:03.962 Slave localhost-0 connected
+14:52:03.962 Slave localhost-1 connected
+14:52:04.071 All slaves are now connected
+14:52:04.290 sd=sd1,lun=\\.\PHYSICALDRIVE27 lun size: 240057409536 bytes; 223.5709 GB (1024**3); 240.0574 GB (1000**3)
+14:52:04.290 sd=sd2,lun=\\.\PHYSICALDRIVE29 lun size: 120034123776 bytes; 111.7905 GB (1024**3); 120.0341 GB (1000**3)
+
+Link to Run Definitions:         <A HREF="#_32815697">run1 For loops: None</A>
+
+14:52:04.321 Waiting for synchronization of all slaves
+14:52:04.649 Synchronization of all slaves complete
+14:52:05.001 Starting RD=run1; I/O rate: Uncontrolled MAX; elapsed=6; For loops: None
+
+<a name="_32815697"></a><i><b>14:52:05.001 Starting RD=run1; I/O rate: Uncontrolled MAX; elapsed=6; For loops: None</b></i>
+
+
+ËÄÔÂ 29, 2019  interval        i/o   MB/sec   bytes   read     resp     read    write     resp     resp queue  cpu%  cpu%
+                             rate  1024**2     i/o    pct     time     resp     resp      max   stddev depth sys+u   sys
+14:52:06.026         1     550.00   550.00 1048576   0.00   33.253    0.000   33.253   61.675    3.318  18.8   3.0   0.8
+14:52:07.011         2     975.00   975.00 1048576   0.00   32.720    0.000   32.720   39.121    0.849  31.9  11.5   4.2
+14:52:08.004         3     974.00   974.00 1048576   0.00   32.629    0.000   32.629   37.257    0.819  31.8   5.0   2.9
+14:52:09.004         4     981.00   981.00 1048576   0.00   32.632    0.000   32.632   36.687    0.672  32.0   2.1   1.6
+14:52:10.003         5     945.00   945.00 1048576   0.00   33.842    0.000   33.842   48.190    4.269  32.0   1.5   1.6
+14:52:11.000         6     825.00   825.00 1048576   0.00   38.027    0.000   38.027  122.258   18.934  32.0   3.3   2.3
+14:52:11.000   avg_2-6     940.00   940.00 1048576   0.00   33.840    0.000   33.840  122.258    8.417  31.9   4.7   2.5
+14:52:11.241 Flushing all reports
+14:52:11.241 Java Heap in MB. max:  247.500; current:   61.875; used:   25.743; free:   36.132
+14:52:11.241 Ending Reporter
+14:52:11.428 Vdbench execution completed successfully. Output directory: C:\Users\sumu\PycharmProjects\vd2win\result 
+
+14:52:11.647 Java Heap in MB. max:  247.500; current:   62.000; used:   16.863; free:   45.137
