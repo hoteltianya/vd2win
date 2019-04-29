@@ -1,1 +1,9 @@
-# vd2win
+# vd4win
+* 要求安装好
+    - python3
+    - smartmontools
+    - pycharm
+* 可能需要改动vdbench的执行路径
+* 可以直接更改vdbench执行时间
+* 会检查vdbench的执行结果和盘片smart信息的结果
+* smart信息会检查05、172、172
