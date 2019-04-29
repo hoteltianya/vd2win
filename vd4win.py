@@ -1,8 +1,6 @@
 import subprocess
 import sys
 
-
-
 def ls_disk():
     ls = []
     disk_list = subprocess.Popen('smartctl --scan', stdout=subprocess.PIPE).stdout.readlines()
@@ -22,17 +20,14 @@ def get_disk_smartinfo(disk):
             if 'Serial' in i:
                 snlist = i.split()
                 smartlist['SN'] = snlist[-1]
-
             if '172 Unknown_Attribute' in i:
                 smartlist['172'] = int(i.split()[-1])
-
             if '5 Reallocated_Sector_Ct' in i:
                 smartlist['05'] = int(i.split()[-1])
             if '171 Unknown_Attribute' in i:
                 smartlist['171'] = int(i.split()[-1])
             if 'Firmware Version' in i:
                 smartlist['FW'] = i.split()[-1]
-    # print (smartlist)
     return smartlist
 
 
@@ -45,14 +40,11 @@ class Vdbench():
         self.lun_list = []
         cmd = 'wmic diskdrive'
         diskinfo = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout.read()
-        # print(diskinfo)
-        # diskinfo = str(diskinfo,encoding="utf-8")
         disk = diskinfo.split(b'\n')
         for i in range(len(disk)):
             #根据容量检查，删除指定容量的盘符
             if '磁盘驱动器' in str(disk[i], encoding='ANSI') and disk[i].split()[-9] != b'1000202273280':
                 self.lun_list.append(str(disk[i].split()[-19],encoding='ANSI'))
-
 
     def creat_vd_config(self):
         sd=''
@@ -60,19 +52,17 @@ class Vdbench():
         for lun in self.lun_list:
             sd = sd + 'sd=sd%d,lun=%s \n' % (i, lun)
             i = i+1
-
         config = '''sd=default,threads=16,openflags=directio
 %swd=wd1,sd=sd*,xfersize=1M,rdpct=0,seekpct=0
 rd=run1,wd=wd1,iorate=max,elapsed=6,interval=1
         ''' %sd
-
         with open('vdconfig', 'w') as f :
             f.write(config)
 
     def exec_vdbench(self):
         cmd = self.vd_path + ' -f vdconfig -o result'
         subprocess.run(cmd)
-        # os.popen(cmd)
+
     def check_reult(self):
         with open('result/errorlog.html') as f:
             print(len(f.readlines()))
@@ -95,6 +85,7 @@ rd=run1,wd=wd1,iorate=max,elapsed=6,interval=1
             print('good list :\n \033[5;37;40m %s \033[0m'% good)
         for bad in bad_list:
             print('bad list :\n \033[5;31;40m %s \033[0m'% bad)
+
     def run(self):
         self.get_lun_list()
         self.creat_vd_config()
