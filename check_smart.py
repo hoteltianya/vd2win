@@ -1,5 +1,5 @@
 #! /usr/bin/python3
-
+# 用于在Linux获取多个盘的smart信息
 import subprocess
 
 def get_disk_smartinfo(disk):
