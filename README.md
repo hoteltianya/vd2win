@@ -4,6 +4,7 @@
     - python3
     - smartmontools
     - pycharm
+* 不要初始化磁盘分区，该脚本对有分区表的磁盘无能
 * 使用管理员打开pycharm，默认不测试WDC和TOSHIBA的盘，其他盘片均会被测试，所以如果是SSD作为系统盘的话，不要轻易尝试
 * 可能需要改动vdbench的执行路径
 * 可以直接更改vdbench执行时间

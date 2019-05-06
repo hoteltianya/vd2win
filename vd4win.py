@@ -1,5 +1,6 @@
 import subprocess
 import sys
+import os
 
 def ls_disk():
     ls = []
@@ -12,7 +13,6 @@ def get_disk_smartinfo(disk):
     smartlist = {}
     cmd = 'smartctl -a ' + disk
     smartinfo = subprocess.getoutput(cmd).split('\n')
-    # model = smartinfo[5].split()
     for i in smartinfo:
         if 'WDC' in i or 'TOSHIBA' in i:
             return None
@@ -26,33 +26,37 @@ def get_disk_smartinfo(disk):
                 smartlist['05'] = int(i.split()[-1])
             if '171 Unknown_Attribute' in i:
                 smartlist['171'] = int(i.split()[-1])
+            if '160 Unknown_Attribute' in i:
+                smartlist['160'] = int(i.split()[-1])
             if 'Firmware Version' in i:
                 smartlist['FW'] = i.split()[-1]
     return smartlist
 
 
 class Vdbench():
-    def __init__(self, vd_path=''):
-        self.vd_path = vd_path
-        self.lun_list = ['\\.\PHYSICALDRIVE1', '\\.\PHYSICALDRIVE2']
+    def __init__(self):
+        path = os.cwd()
+        self.vd_path = path + '\\vdbench50403\\vdbench.bat'
+        self.lun_list = []
 
     def get_lun_list(self):
-        self.lun_list = []
         cmd = 'wmic diskdrive'
         diskinfo = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout.read()
         disk = diskinfo.split(b'\n')
         for i in range(len(disk)):
             #根据容量检查，删除指定容量的盘符
             if '磁盘驱动器' in str(disk[i], encoding='ANSI') and disk[i].split()[-9] != b'1000202273280':
-                self.lun_list.append(str(disk[i].split()[-19],encoding='ANSI'))
+                self.lun_list.append(str(disk[i].split()[-19], encoding='ANSI'))
 
     def creat_vd_config(self):
-        sd=''
+        sd = ''
         i = 1
         for lun in self.lun_list:
             sd = sd + 'sd=sd%d,lun=%s \n' % (i, lun)
             i = i+1
-        config = '''sd=default,threads=16,openflags=directio
+        config = '''data_errors=1
+hd=localhost,jvms=8
+sd=default,threads=16,openflags=directio
 %swd=wd1,sd=sd*,xfersize=1M,rdpct=0,seekpct=0
 rd=run1,wd=wd1,iorate=max,elapsed=6,interval=1
         ''' %sd
@@ -92,7 +96,7 @@ rd=run1,wd=wd1,iorate=max,elapsed=6,interval=1
         self.exec_vdbench()
         self.check_reult()
 
-a = Vdbench(r'C:\Users\sumu\Desktop\vd\vdbench50403\vdbench.bat')
+a = Vdbench()
 a.run()
 
 
