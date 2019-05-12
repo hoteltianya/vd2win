@@ -3,6 +3,7 @@ import sys
 import os
 
 def ls_disk():
+    # 执行这个函数会返回系统的块设备列表，如['/dev/sda','/dev/sdb']
     ls = []
     disk_list = subprocess.getoutput('smartctl --scan').split('\n')
     for disk in disk_list:
@@ -10,6 +11,8 @@ def ls_disk():
     return ls
 
 def get_disk_smartinfo(disk):
+    # 这个函数会返回不是西数东芝虚拟盘而是其他盘的smart信息中的序列号、05、160、171、172的值，使用的smartctl工具，目前在Windows下
+    # 还不知道其他的工具，因此需要安装smartmontools程序
     smartlist = {}
     cmd = 'smartctl -a ' + disk
     smartinfo = subprocess.getoutput(cmd).split('\n')
