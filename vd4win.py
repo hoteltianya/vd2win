@@ -14,7 +14,7 @@ def get_disk_smartinfo(disk):
     cmd = 'smartctl -a ' + disk
     smartinfo = subprocess.getoutput(cmd).split('\n')
     for i in smartinfo:
-        if 'WDC' in i or 'TOSHIBA' in i:
+        if 'WDC' in i or 'TOSHIBA' in i or 'Virtual' in i:
             return None
         else:
             if 'Serial' in i:
@@ -44,7 +44,7 @@ class Vdbench():
         diskinfo = subprocess.getoutput(cmd)
 
         for disk in diskinfo.split('\n'):
-            if 'SSDC' in disk or 'SSDE' in disk or 'GG0' in disk or 'SC36' in disk:
+            if 'SSDC' in disk or 'SSDE' in disk or 'GG0' in disk or 'SC36' in disk or 'JEYI' in disk or 'AMST' in disk:
                 # print(disk.split())
                 self.lun_list.append(disk.split()[-2])
 
@@ -58,7 +58,7 @@ class Vdbench():
 hd=localhost,jvms=8
 sd=default,threads=16,openflags=directio
 %swd=wd1,sd=sd*,xfersize=1M,rdpct=0,seekpct=0
-rd=run1,wd=wd1,iorate=max,elapsed=6,interval=1
+rd=run1,wd=wd1,iorate=max,elapsed=600,interval=1
         ''' %sd
         with open('vdconfig', 'w') as f :
             f.write(config)
@@ -81,7 +81,7 @@ rd=run1,wd=wd1,iorate=max,elapsed=6,interval=1
             smartinfo = get_disk_smartinfo(disk)
             print(smartinfo)
             if smartinfo:
-                if smartinfo['05'] == 0 and smartinfo['172'] == 0 and smartinfo['171'] == 0:
+                if smartinfo['05'] == 0 and smartinfo['172'] == 0 and smartinfo['171'] == 0 and smartinfo['160'] == 0:
                     self.good_list.append(smartinfo['SN'])
                 else:
                     self.bad_list.append(smartinfo['SN'])
