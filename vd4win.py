@@ -35,18 +35,18 @@ def get_disk_smartinfo(disk):
 
 class Vdbench():
     def __init__(self):
-        path = os.cwd()
+        path = os.getcwd()
         self.vd_path = path + '\\vdbench50403\\vdbench.bat'
         self.lun_list = []
 
     def get_lun_list(self):
-        cmd = 'wmic diskdrive'
-        diskinfo = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout.read()
-        disk = diskinfo.split(b'\n')
-        for i in range(len(disk)):
-            #根据容量检查，删除指定容量的盘符
-            if '磁盘驱动器' in str(disk[i], encoding='ANSI') and disk[i].split()[-9] != b'1000202273280':
-                self.lun_list.append(str(disk[i].split()[-19], encoding='ANSI'))
+        cmd = 'wmic DISKDRIVE get deviceid,Caption,size'
+        diskinfo = subprocess.getoutput(cmd)
+
+        for disk in diskinfo.split('\n'):
+            if 'SSDC' in disk or 'SSDE' in disk or 'GG0' in disk or 'SC36' in disk:
+                # print(disk.split())
+                self.lun_list.append(disk.split()[-2])
 
     def creat_vd_config(self):
         sd = ''
@@ -65,7 +65,7 @@ rd=run1,wd=wd1,iorate=max,elapsed=6,interval=1
 
     def exec_vdbench(self):
         cmd = self.vd_path + ' -f vdconfig -o result'
-        subprocess.run(cmd)
+        self.vdlog = subprocess.getoutput(cmd)
 
     def check_reult(self):
         with open('result/errorlog.html') as f:
@@ -75,19 +75,19 @@ rd=run1,wd=wd1,iorate=max,elapsed=6,interval=1
                 sys.exit()
         disk_list = ls_disk()
         print(disk_list)
-        good_list = []
-        bad_list = []
+        self.good_list = []
+        self.bad_list = []
         for disk in disk_list:
             smartinfo = get_disk_smartinfo(disk)
             print(smartinfo)
             if smartinfo:
                 if smartinfo['05'] == 0 and smartinfo['172'] == 0 and smartinfo['171'] == 0:
-                    good_list.append(smartinfo['SN'])
+                    self.good_list.append(smartinfo['SN'])
                 else:
-                    bad_list.append(smartinfo['SN'])
-        for good in good_list:
+                    self.bad_list.append(smartinfo['SN'])
+        for good in self.good_list:
             print('good list :\n \033[5;37;40m %s \033[0m'% good)
-        for bad in bad_list:
+        for bad in self.bad_list:
             print('bad list :\n \033[5;31;40m %s \033[0m'% bad)
 
     def run(self):
