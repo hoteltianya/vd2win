@@ -4,9 +4,9 @@ import os
 
 def ls_disk():
     ls = []
-    disk_list = subprocess.Popen('smartctl --scan', stdout=subprocess.PIPE).stdout.readlines()
+    disk_list = subprocess.getoutput('smartctl --scan').split('\n')
     for disk in disk_list:
-        ls.append(str(disk.split()[0], encoding="utf-8"))
+        ls.append(disk.split()[0])
     return ls
 
 def get_disk_smartinfo(disk):
