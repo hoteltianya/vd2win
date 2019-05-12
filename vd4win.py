@@ -3,18 +3,21 @@ import sys
 import os
 
 def ls_disk():
+    # 执行这个函数会返回系统的块设备列表，如['/dev/sda','/dev/sdb']
     ls = []
-    disk_list = subprocess.Popen('smartctl --scan', stdout=subprocess.PIPE).stdout.readlines()
+    disk_list = subprocess.getoutput('smartctl --scan').split('\n')
     for disk in disk_list:
-        ls.append(str(disk.split()[0], encoding="utf-8"))
+        ls.append(disk.split()[0])
     return ls
 
 def get_disk_smartinfo(disk):
+    # 这个函数会返回不是西数东芝虚拟盘而是其他盘的smart信息中的序列号、05、160、171、172的值，使用的smartctl工具，目前在Windows下
+    # 还不知道其他的工具，因此需要安装smartmontools程序
     smartlist = {}
     cmd = 'smartctl -a ' + disk
     smartinfo = subprocess.getoutput(cmd).split('\n')
     for i in smartinfo:
-        if 'WDC' in i or 'TOSHIBA' in i:
+        if 'WDC' in i or 'TOSHIBA' in i or 'Virtual' in i:
             return None
         else:
             if 'Serial' in i:
@@ -44,7 +47,7 @@ class Vdbench():
         diskinfo = subprocess.getoutput(cmd)
 
         for disk in diskinfo.split('\n'):
-            if 'SSDC' in disk or 'SSDE' in disk or 'GG0' in disk or 'SC36' in disk:
+            if 'SSDC' in disk or 'SSDE' in disk or 'GG0' in disk or 'SC36' in disk or 'JEYI' in disk or 'AMST' in disk:
                 # print(disk.split())
                 self.lun_list.append(disk.split()[-2])
 
@@ -58,7 +61,7 @@ class Vdbench():
 hd=localhost,jvms=8
 sd=default,threads=16,openflags=directio
 %swd=wd1,sd=sd*,xfersize=1M,rdpct=0,seekpct=0
-rd=run1,wd=wd1,iorate=max,elapsed=6,interval=1
+rd=run1,wd=wd1,iorate=max,elapsed=600,interval=1
         ''' %sd
         with open('vdconfig', 'w') as f :
             f.write(config)
@@ -81,7 +84,7 @@ rd=run1,wd=wd1,iorate=max,elapsed=6,interval=1
             smartinfo = get_disk_smartinfo(disk)
             print(smartinfo)
             if smartinfo:
-                if smartinfo['05'] == 0 and smartinfo['172'] == 0 and smartinfo['171'] == 0:
+                if smartinfo['05'] == 0 and smartinfo['172'] == 0 and smartinfo['171'] == 0 and smartinfo['160'] == 0:
                     self.good_list.append(smartinfo['SN'])
                 else:
                     self.bad_list.append(smartinfo['SN'])
